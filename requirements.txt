@@ -1,0 +1,39 @@
+# DSCA / DSANet 训练依赖
+# 实测导出：2026-09-20，来自本机 conda 环境 dsca（Python 3.11.16）
+#
+# ⚠️⚠️ torch 必须装 CUDA 版，这是最容易翻车的一步 ⚠️⚠️
+#
+#   直接 `pip install torch` 很可能给你装成 **CPU 版** —— 训练不会报错，
+#   但会慢几十倍（本机就踩过这个坑，4 个环境因此全部废弃重装）。
+#
+#   正确做法：先在服务器上跑 `nvidia-smi`，看右上角 "CUDA Version: 12.x"，
+#   再选对应的 index-url 安装：
+#
+#     CUDA 12.6  ->  pip install torch --index-url https://download.pytorch.org/whl/cu126
+#     CUDA 12.4  ->  pip install torch --index-url https://download.pytorch.org/whl/cu124
+#     CUDA 12.1  ->  pip install torch --index-url https://download.pytorch.org/whl/cu121
+#     CUDA 11.8  ->  pip install torch --index-url https://download.pytorch.org/whl/cu118
+#
+#   装完**必须**验证，看到 True 才算成功：
+#     python -c "import torch; print(torch.__version__, torch.cuda.is_available())"
+#
+#   本机实测输出：2.14.0+cu126 True
+
+# ---- 核心 ----
+# 本机实测 2.14.0+cu126。版本号里的 +cu126 后缀就是 CUDA 版的标志；
+# 如果打印出来只有 "2.14.0" 没有 +cuXXX，说明装成 CPU 版了。
+torch>=2.10
+
+# ---- 科学计算 / 医学影像 IO ----
+numpy>=2.0            # 实测 2.4.6
+scipy>=1.13           # 实测 1.17.1   —— 数据增强用的 ndimage（CPU 侧）
+pydicom>=3.0          # 实测 3.0.2    —— 读 .dcm 多帧序列
+nibabel>=5.0          # 实测 5.4.2    —— 读 .nii.gz 标签
+scikit-image>=0.24    # 实测 0.26.0   —— import 名是 skimage
+einops>=0.8           # 实测 0.8.2    —— TemporalFormer 的张量重排
+
+# ---- 确认过「不需要装」的 ----
+# nnunetv2   ：代码只借用「nnUNet 风格」的骨架（4 次下采样、chs 32..512），
+#              **并没有 import nnunetv2**，服务器上不用装，省掉一堆麻烦。
+# SimpleITK  ：本机环境里有，但代码没用到。
+# timm       ：同上。
