@@ -22,20 +22,20 @@ F:\Projects\DSCA\
 │   ├── dsanet.py               L3  总装
 │   └── losses.py               CE + Dice + 深监督
 ├── data\
-│   ├── prepare.py              P0  原始数据 -> .npz（含自检报告、5 折划分）
+│   ├── prepare.py              P0  原始数据 -> .npz
 │   └── dataset.py              Dataset + 数据增强
-├── tests\                      验收测试（跑通了才算这一层做完）
+├── tests\                      验收测试
 │   ├── test_temporalformer.py  L1  20 项判据
 │   ├── test_stf.py             L2  11 项判据
-│   └── test_dsanet.py          L3  13 项判据（含端到端显存实测）
-├── metrics.py                  Dice 指标（含缺失类别的处理规则）
+│   └── test_dsanet.py          L3  13 项判据
+├── metrics.py                  Dice 指标
 ├── inference.py                推理：镜像 TTA
 ├── train.py                    训练
 ├── evaluate.py                 评估
 ├── diagnose.py                 数据/优化器/可学性诊断（data / scale / overfit ...）
 ├── viz_failures.py             失败样本可视化（8 帧 + MinIP/MaxIP + 直方图）
 ├── plot_learning_curve.py      学习曲线出图（滑动平均 + 噪声带 + 脱困点）
-├── fetch_histories.sh          只把集群的 history.json 拉回本机（供本机出图）
+├── fetch_histories.sh          
 └── README.md                   本文件
 ```
 
@@ -43,8 +43,8 @@ F:\Projects\DSCA\
 
 ```
 E:\Datasets\DSCA\
-├── DSA_public\                 原始数据（Zenodo 11255024，已获批下载）
-└── processed\                  预处理产物（约 350 MiB）
+├── DSA_public\                 原始数据
+└── processed\                  预处理产物
     ├── train\*.npz             180 例
     ├── test\*.npz              44 例
     ├── folds.json              5 折划分
